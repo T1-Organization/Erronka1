@@ -48,7 +48,45 @@ if ($error) {
   <?php
 }
 ?>
+<?php
+if (isset($_SESSION['usuario_id'])) {
+  $nombreUsuario = $_SESSION['nombre_usuario'];
+  $administradorUsuario = $_SESSION['administrador'];
+  echo $nombreUsuario;
+  /*if ($administradorUsuario) {
+    // Mostrar contenido específico para administradores
+    //echo "Administrador, $nombreUsuario";
+    echo  $nombreUsuario;
+  } else {
+    // Mostrar contenido para usuarios no administradores 
+    //echo "Bienvenido, $nombreUsuario";
+  }*/
+  echo '<br>';
+  echo ' <a href="logout.php">Cerrar sesión</a>';
+} else {
+  echo "Bienvenido al sitio web"; 
+  echo ' <a href="login.php">Iniciar sesión</a>';
+}
+/*
+if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
+  // Mostrar contenido específico para administradores
+  echo "<p>Bienvenido, administrador.</p>";
+  $nombreUsuario = $_SESSION['nombre_usuario'];
+  echo "Bienvenido, $nombreUsuario";
+  echo ' <a href="logout.php">Cerrar sesión</a>';
+  // Coloca aquí el contenido adicional para administradores
+} else {
+  // Mostrar contenido para usuarios no administradores
+  echo "<p>Bienvenido, usuario normal.</p>";
+  $nombreUsuario = $_SESSION['nombre_usuario'];
+  echo "Bienvenido, $nombreUsuario";
+  echo ' <a href="logout.php">Cerrar sesión</a>';
+  // Coloca aquí el contenido adicional para usuarios normales
+}
 
+*/
+
+?>
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -105,5 +143,6 @@ if ($error) {
     </div>
   </div>
 </div>
+<a href="formulario.php">Crear nuevo usuario</a>
 
 <?php include "templates/footer.php"; ?>
