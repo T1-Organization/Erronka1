@@ -90,7 +90,7 @@ if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <a href="crear.php"  class="btn btn-primary mt-4">Crear alumno</a>
+      <a href="views/alumno/crear.php"  class="btn btn-primary mt-4">Crear alumno</a>
       <hr>
       <form method="post" class="form-inline">
         <div class="form-group mr-3">
@@ -130,8 +130,8 @@ if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
                 <td><?php echo escapar($fila["email"]); ?></td>
                 <td><?php echo escapar($fila["edad"]); ?></td>
                 <td>
-                  <a href="<?= 'borrar.php?id=' . escapar($fila["id"]) ?>">🗑️Borrar</a>
-                  <a href="<?= 'editar.php?id=' . escapar($fila["id"]) ?>">✏️Editar</a>
+                  <a href="<?= 'views/alumno/borrar.php?id=' . escapar($fila["id"]) ?>">🗑️Borrar</a>
+                  <a href="<?= 'views/alumno/editar.php?id=' . escapar($fila["id"]) ?>">✏️Editar</a>
                 </td>
               </tr>
               <?php

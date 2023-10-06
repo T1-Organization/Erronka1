@@ -11,25 +11,18 @@
   <label for="administrador">¿Es administrador?</label>
   <input type="checkbox" id="administrador" name="administrador"><br>
   <input type="hidden" name="csrf" value="<?php echo $_SESSION['csrf']; ?>"><br>
+  <label for="alumnoId">Selecciona un Alumno:</label>
+        <select name="alumnoId" id="alumnoId" required>
+            <?php
+            // Aquí deberías obtener la lista de alumnos desde tu controlador
+            $usuariosController = new UsuarioController();
+            $alumnos = $usuariosController->listarAlumnos();
 
-  <label for="alumno">Selecciona un Alumno:</label>
-<select name="alumno" id="alumno" required>
-  <?php
-  // Conecta a la base de datos
-  $config = include 'config.php';
-  $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
-  $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
-  
-  // Consulta SQL para obtener la lista de alumnos
-  $consultaAlumnos = "SELECT id, nombre, apellido FROM alumnos";
-  $resultadoAlumnos = $conexion->query($consultaAlumnos);
-  
-  // Recorre los resultados y crea opciones para cada alumno
-  while ($alumno = $resultadoAlumnos->fetch(PDO::FETCH_ASSOC)) {
-    echo '<option value="' . $alumno['id'] . '">' . $alumno['nombre'] . ' ' . $alumno['apellido'] . '</option>';
-  }
-  ?>
-</select><br>
+            foreach ($alumnos as $alumno) {
+                echo '<option value="' . $alumno->getId() . '">' . $alumno->getNombreCompleto() . '</option>';
+            }
+            ?>
+        </select><br>
 <input type="submit" name="submit" value="Crear Usuario">
 </form>
 </body>
