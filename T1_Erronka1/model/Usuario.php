@@ -88,6 +88,7 @@ class Usuario {
         }
     }
     public function guardarEnBaseDeDatos() {
+        echo "A";
         try {
             $config = include __DIR__ . '/../config.php';
 
@@ -96,18 +97,26 @@ class Usuario {
             $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
 
             // Preparar la consulta SQL para insertar el usuario
-            $consultaSQL = "INSERT INTO usuarios (nombreUsuario, contrasena, administrador, alumnoId) VALUES (:nombreUsuario, :contrasena, :administrador, :alumnoId)";
+            $consultaSQL = "INSERT INTO usuarios (usuario, contraseña, administrador, id_alumno) VALUES (:nombreUsuario, :contrasena, :administrador, :alumnoId)";
             $sentencia = $conexion->prepare($consultaSQL);
+            echo "Consulta SQL antes de ejecutarla: " . $consultaSQL . "<br>";
+
+
+            // Muestra los valores de los parámetros después de vincularlos
+            echo "Valor de :nombreUsuario = " . $this->nombreUsuario . "<br>";
+            echo "Valor de :contrasena = " . $this->contrasena . "<br>";
+            echo "Valor de :administrador = " . $this->administrador . "<br>";
+            echo "Valor de :alumnoId = " . $this->alumnoId . "<br>";
 
             // Bind de los parámetros
             $sentencia->bindParam(':nombreUsuario', $this->nombreUsuario, PDO::PARAM_STR);
             $sentencia->bindParam(':contrasena', $this->contrasena, PDO::PARAM_STR);
             $sentencia->bindParam(':administrador', $this->administrador, PDO::PARAM_INT);
             $sentencia->bindParam(':alumnoId', $this->alumnoId, PDO::PARAM_INT);
-
+            echo "Consulta SQL antes de ejecutarla: " . $sentencia->queryString . "<br>";
             // Ejecutar la consulta
             $resultado = $sentencia->execute();
-
+            echo" echo despues sentencia";
             // Verificar si la inserción tuvo éxito
             if ($resultado) {
                 return true; // La inserción se realizó con éxito
@@ -122,6 +131,52 @@ class Usuario {
         }
     }
 
+    public static function obtenerPorNombreUsuario($nombreUsuario) {
+        try {
+            // Conectar a la base de datos y ejecutar la consulta para obtener el usuario por nombre de usuario
+            $config = include __DIR__ . '/../config.php';
+            $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
+            $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    
+            $consulta = "SELECT * FROM usuarios WHERE nombreUsuario = :nombreUsuario";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->bindParam(':nombreUsuario', $nombreUsuario, PDO::PARAM_STR);
+            $sentencia->execute();
+    
+            // Obtener el resultado como un objeto de la clase Usuario
+            $usuario = $sentencia->fetchObject('Usuario');
+    
+            return $usuario;
+        } catch (PDOException $error) {
+            // Manejo de errores en caso de problemas con la base de datos
+            // Registra el error en el registro de errores o muestra un mensaje de error detallado
+            error_log("Error al obtener usuario por nombre de usuario: " . $error->getMessage());
+            return null; // Retorna null en caso de error
+        }
+    }
+    public static function obtenerPorId($id) {
+        try {
+            // Conectar a la base de datos y ejecutar la consulta para obtener el usuario por ID
+            $config = include __DIR__ . '/../config.php';
+            $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
+            $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    
+            $consulta = "SELECT * FROM usuarios WHERE id = :id";
+            $sentencia = $conexion->prepare($consulta);
+            $sentencia->bindParam(':id', $id, PDO::PARAM_INT);
+            $sentencia->execute();
+    
+            // Obtener el resultado como un objeto de la clase Usuario
+            $usuario = $sentencia->fetchObject('Usuario');
+    
+            return $usuario;
+        } catch (PDOException $error) {
+            // Manejo de errores en caso de problemas con la base de datos
+            // Registra el error en el registro de errores o muestra un mensaje de error detallado
+            error_log("Error al obtener usuario por ID: " . $error->getMessage());
+            return null; // Retorna null en caso de error
+        }
+    }
 
 }
 

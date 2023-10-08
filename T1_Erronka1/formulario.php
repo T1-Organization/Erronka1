@@ -1,4 +1,13 @@
-
+<?php
+//session_start(); // Inicia la sesión
+include 'funciones.php';
+$config = include 'config.php';
+csrf();
+if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
+  die();
+}
+include 'controller/UsuarioController.php';
+?>
 <html>
 <body>
 <form method="post" action="crear_usuario.php">
@@ -10,7 +19,7 @@
 
   <label for="administrador">¿Es administrador?</label>
   <input type="checkbox" id="administrador" name="administrador"><br>
-  <input type="hidden" name="csrf" value="<?php echo $_SESSION['csrf']; ?>"><br>
+ <input type="hidden" name="csrf" value="<?php echo $_SESSION['csrf']; ?>"><br>
   <label for="alumnoId">Selecciona un Alumno:</label>
         <select name="alumnoId" id="alumnoId" required>
             <?php
@@ -19,7 +28,8 @@
             $alumnos = $usuariosController->listarAlumnos();
 
             foreach ($alumnos as $alumno) {
-                echo '<option value="' . $alumno->getId() . '">' . $alumno->getNombreCompleto() . '</option>';
+                //echo '<option value="' . $alumno->getId() . '">' . $alumno->getNombreCompleto() ."-". $alumno->getId() .'</option>';
+                 echo '<option value="' . $alumno->getId() . '">' . $alumno->getNombreCompleto().'</option>';
             }
             ?>
         </select><br>

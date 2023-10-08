@@ -1,21 +1,23 @@
 <?php
 
 class Alumno {
- 
+    private $id;
     private $nombre;
     private $apellido;
     private $email;
     private $edad;
 
-    public function __construct($nombre, $apellido, $email, $edad) {
-        
+    public function __construct($id,$nombre, $apellido, $email, $edad) {
+        $this->id = $id;
         $this->nombre = $nombre;
         $this->apellido = $apellido;
         $this->email = $email;
         $this->edad = $edad;
     }
 
- 
+    public function getId() {
+        return $this->id;
+    }
     public function getNombre() {
         return $this->nombre;
     }
@@ -48,10 +50,13 @@ class Alumno {
     public function setEdad($edad) {
         $this->edad = $edad;
     }
-
+    public function getNombreCompleto() {
+        return $this->nombre . ' ' . $this->apellido;
+    }
     public function guardarEnBaseDeDatos() {
         try {
-            $config = include __DIR__ . '/../../config.php';
+            //$config = include __DIR__ . '/../../config.php';
+            $config = include __DIR__ . '/../config.php';
 
             // Establecer la conexión a la base de datos
             $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];

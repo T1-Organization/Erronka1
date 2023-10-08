@@ -10,31 +10,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
     // Recopila los datos del formulario
     $nombreUsuario = $_POST['usuario'];
-    $contrasena = $_POST['contraseña'];
+    $contrasena = $_POST['contrasena'];
     $administrador = isset($_POST['administrador']) ? 1 : 0; // 1 si está marcado, 0 si no
     $alumnoId = $_POST['alumnoId'];
-
+    echo "alumnoId:  ".$alumnoId; 
     // Crea una instancia del controlador de usuarios
     $usuariosController = new UsuarioController();
 
     // Crea un nuevo objeto Usuario
     $nuevoUsuario = new Usuario( $nombreUsuario, $contrasena, $administrador, $alumnoId);
-
+    echo "Usuario creado exitosamente para " . $nuevoUsuario->getNombreUsuario();
     // Intenta guardar el nuevo usuario en la base de datos
     if ($usuariosController->crearUsuario($nuevoUsuario)) {
         // Éxito: el usuario se creó correctamente
         // Puedes redirigir o mostrar un mensaje de éxito
-        header('Location: crear_usuario.php');
+
+        header('Location: administrazioa.php');
         exit();
     } else {
         // Error al crear el usuario
         // Puedes redirigir o mostrar un mensaje de error
-        header('Location: crear_usuario.php');
+        //header('Location: crear_usuario.php');
         exit();
     }
 } else {
     // Redirige si se intenta acceder directamente a este script sin enviar el formulario
-    header('Location: crear_usuario.php');
+    //header('Location: crear_usuario.php');
     exit();
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ .  '/../model/Usuario.php';
-
+include_once __DIR__ . '/../model/Alumno.php';
 class UsuarioController {
     
     public static function crearUsuario($usuario) {
@@ -16,9 +16,6 @@ class UsuarioController {
         return $guardado;
     }
     
-
-        
-    
     public static function listarAlumnos() {
         try {
             // Conecta a la base de datos
@@ -27,16 +24,27 @@ class UsuarioController {
             $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
     
             // Consulta SQL para obtener la lista de alumnos
-            $consultaAlumnos = "SELECT id, nombre, apellido FROM alumnos";
+            $consultaAlumnos = "SELECT id,nombre, apellido, email, edad FROM alumnos";
             $resultadoAlumnos = $conexion->query($consultaAlumnos);
     
-            $alumnos = array(); // Inicializa un arreglo para almacenar los alumnos
+            $alumnos = array(); // Inicializa un arreglo para almacenar los objetos Alumno
     
-            // Recorre los resultados y crea un array con los alumnos
+            // Recorre los resultados y crea objetos Alumno
             while ($fila = $resultadoAlumnos->fetch(PDO::FETCH_ASSOC)) {
-                $alumnos[] = $fila;
+                var_dump($fila);
+                echo '<br>';
+
+                $alumno = new Alumno($fila['id'],$fila['nombre'], $fila['apellido'], $fila['email'], $fila['edad']);
+                $alumnos[] = $alumno;
             }
-    
+
+            $alumno = new Alumno( 25,"Nombre", "Apellido", "email@example.com",25);
+            echo "getID prueba".$alumno->getId();
+
+                // Imprime el array de alumnos para depuración
+            echo '<pre>';
+            print_r($alumnos);
+            echo '</pre>';
             return $alumnos;
         } catch (PDOException $error) {
             // Manejo de errores en caso de problemas con la base de datos
@@ -45,6 +53,8 @@ class UsuarioController {
             return array(); // Retorna un arreglo vacío en caso de error
         }
     }
+    
+    
     
 
     public static function obtenerUsuarioPorId($id) {

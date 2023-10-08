@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $controladorAlumno = new AlumnoController();
 
         // Obtener datos del formulario
+        $id = "";
         $nombre = $_POST['nombre'];
         $apellido = $_POST['apellido'];
         $email = $_POST['email'];
@@ -32,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Crear una instancia de la clase Alumno
-        $alumno = new Alumno( $nombre, $apellido, $email, $edad);
-
+        $alumno = new Alumno($id, $nombre, $apellido, $email, $edad);
+       
         $nombre = $alumno->getNombre();
         $apellido = $alumno->getApellido();
         $email = $alumno->getEmail();
