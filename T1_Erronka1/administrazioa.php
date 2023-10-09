@@ -24,6 +24,18 @@ try {
 
   $alumnos = $sentencia->fetchAll();
 
+  //lista usuarios
+
+  $consultaSQLUsuarios = "SELECT * FROM usuarios";
+  $sentenciaUsuarios = $conexion->prepare($consultaSQLUsuarios);
+  $sentenciaUsuarios->execute();
+
+  $usuarios = $sentenciaUsuarios->fetchAll();
+
+  $sql = "SELECT id, nombre, familia FROM cursos";
+  $sentenciaCursos = $conexion->query($sql);
+  $sentenciaCursos->execute();
+
 } catch(PDOException $error) {
   $error= $error->getMessage();
 }
@@ -143,6 +155,100 @@ if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
     </div>
   </div>
 </div>
-<a href="formulario.php">Crear nuevo usuario</a>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+    <a href="formulario.php"  class="btn btn-primary mt-4">Crear nuevo usuario</a>
+      <hr>
+    </div>
+  </div>
+</div>
+<!-- Agrega la tabla de usuarios después de la tabla de alumnos -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mt-3">Lista de usuarios</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre de Usuario</th>
+                        <th>Administrador</th>
+                        <!-- Agrega más columnas según tus necesidades -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($usuarios && $sentenciaUsuarios->rowCount() > 0) {
+                        foreach ($usuarios as $filaUsuario) {
+                            ?>
+                            <tr>
+                                <td><?php echo escapar($filaUsuario["id"]); ?></td>
+                                <td><?php echo escapar($filaUsuario["usuario"]); ?></td>
+                                <td><?php echo escapar($filaUsuario["administrador"]); ?></td>
+                                <!-- Agrega más celdas según tus necesidades -->
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mt-3">Lista de Cursos</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Familia</th>
+                        <!-- Agrega más columnas según tus necesidades -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                     if ($sentenciaCursos->rowCount() > 0) {
+                      while ($row = $sentenciaCursos->fetch(PDO::FETCH_ASSOC)) {
+                            ?>
+                            <tr>
+                                <td><?php echo escapar($row["id"]); ?></td>
+                                <td><?php echo escapar($row["nombre"]); ?></td>
+                                <td><?php echo escapar($row["familia"]); ?></td>
+                                <td><a href="inscribirse.php?id=<?php echo escapar($row["id"]); ?>" class="btn btn-primary">Inscribirse</a></td>
+                                <!-- Agrega más celdas según tus necesidades -->
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php
+
+   // Comprobar si se encontraron cursos
+   /*if ($sentenciaCursos->rowCount() > 0) {
+    echo '<h1>Lista de Cursos</h1>';
+    echo '<ul>';
+    while ($row = $sentenciaCursos->fetch(PDO::FETCH_ASSOC)) {
+        echo '<li><a href="inscribirse.php?id=' . $row['id'] . '">' . $row['nombre'] . '</a></li>';
+    }
+    echo '</ul>';
+} else {
+    echo 'No se encontraron cursos.';
+}*/
+?>
+
+
+
+
 
 <?php include "templates/footer.php"; ?>

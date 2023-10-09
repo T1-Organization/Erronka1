@@ -1,7 +1,7 @@
 <?php
 
 include 'funciones.php';
-session_start(); // Iniciar la sesión al comienzo del archivo
+// Iniciar la sesión al comienzo del archivo
 
 csrf();
 
