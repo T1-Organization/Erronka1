@@ -10,6 +10,7 @@ $error = false;
 $config = include 'config.php';
 
 try {
+
   $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
   $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
 
@@ -220,7 +221,18 @@ if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
                                 <td><?php echo escapar($row["id"]); ?></td>
                                 <td><?php echo escapar($row["nombre"]); ?></td>
                                 <td><?php echo escapar($row["familia"]); ?></td>
-                                <td><a href="inscribirse.php?id=<?php echo escapar($row["id"]); ?>" class="btn btn-primary">Inscribirse</a></td>
+                              <?php
+                              if (isset($_SESSION['usuario_id'])){
+                              ?>
+                                <td>
+                                <form method="post" action="inscribirse.php">
+                                  <input type="hidden" name="id" value="<?php echo escapar($row["id"]); ?>">
+                                  <button type="submit" class="btn btn-primary">Inscribirse</button>
+                                </form>
+                              </td>
+                              <?php
+                                }
+                              ?>
                                 <!-- Agrega más celdas según tus necesidades -->
                             </tr>
                             <?php

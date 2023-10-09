@@ -33,7 +33,7 @@ class Inscripcion {
     }
 
     // Otros métodos relacionados con las inscripciones
-    public function inscribirseEnCurso($conexion) {
+    public function inscribirse($conexion) {
         echo 'A';
         try {
             echo 'B';
