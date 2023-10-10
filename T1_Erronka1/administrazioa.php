@@ -188,6 +188,12 @@ if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
                                 <td><?php echo escapar($filaUsuario["usuario"]); ?></td>
                                 <td><?php echo escapar($filaUsuario["administrador"]); ?></td>
                                 <!-- Agrega más celdas según tus necesidades -->
+                                <td>
+                                    <form action="eliminar_usuario.php" method="POST">
+                                        <input type="hidden" name="id_usuario" value="<?php echo escapar($filaUsuario["id"]); ?>">
+                                        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">Eliminar</button>
+                                    </form>
+                                </td>
                             </tr>
                             <?php
                         }

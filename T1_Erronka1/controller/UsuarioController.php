@@ -95,7 +95,7 @@ class UsuarioController {
         }
 
         // Eliminar el usuario de la base de datos
-        $eliminado = $usuarioExistente->eliminarDeBaseDeDatos();
+        $eliminado = $usuarioExistente->borrarDeBaseDeDatos($id);
 
         return $eliminado;
     }
