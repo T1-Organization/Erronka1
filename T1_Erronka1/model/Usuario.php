@@ -95,25 +95,19 @@ class Usuario {
             // Establecer la conexión a la base de datos
             $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
             $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+            // Cifrar la contraseña
+            $contrasenaCifrada = password_hash($this->contrasena, PASSWORD_DEFAULT);
 
             // Preparar la consulta SQL para insertar el usuario
             $consultaSQL = "INSERT INTO usuarios (usuario, contraseña, administrador, id_alumno) VALUES (:nombreUsuario, :contrasena, :administrador, :alumnoId)";
             $sentencia = $conexion->prepare($consultaSQL);
-            echo "Consulta SQL antes de ejecutarla: " . $consultaSQL . "<br>";
-
-
-            // Muestra los valores de los parámetros después de vincularlos
-            echo "Valor de :nombreUsuario = " . $this->nombreUsuario . "<br>";
-            echo "Valor de :contrasena = " . $this->contrasena . "<br>";
-            echo "Valor de :administrador = " . $this->administrador . "<br>";
-            echo "Valor de :alumnoId = " . $this->alumnoId . "<br>";
 
             // Bind de los parámetros
             $sentencia->bindParam(':nombreUsuario', $this->nombreUsuario, PDO::PARAM_STR);
-            $sentencia->bindParam(':contrasena', $this->contrasena, PDO::PARAM_STR);
+            $sentencia->bindParam(':contrasena', $contrasenaCifrada, PDO::PARAM_STR);
             $sentencia->bindParam(':administrador', $this->administrador, PDO::PARAM_INT);
             $sentencia->bindParam(':alumnoId', $this->alumnoId, PDO::PARAM_INT);
-            echo "Consulta SQL antes de ejecutarla: " . $sentencia->queryString . "<br>";
+
             // Ejecutar la consulta
             $resultado = $sentencia->execute();
             echo" echo despues sentencia";

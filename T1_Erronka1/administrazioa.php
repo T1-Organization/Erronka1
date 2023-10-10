@@ -1,6 +1,6 @@
 <?php
 include 'funciones.php';
-
+require_once 'controller/CursoController.php';
 csrf();
 if (isset($_POST['submit']) && !hash_equals($_SESSION['csrf'], $_POST['csrf'])) {
   die();
@@ -42,6 +42,7 @@ try {
 }
 
 $titulo = isset($_POST['apellido']) ? 'Lista de alumnos (' . $_POST['apellido'] . ')' : 'Lista de alumnos';
+if (isset($_SESSION['usuario_id']) && $_SESSION['administrador']) {
 ?>
 
 <?php include "templates/header.php"; ?>
@@ -66,38 +67,13 @@ if (isset($_SESSION['usuario_id'])) {
   $nombreUsuario = $_SESSION['nombre_usuario'];
   $administradorUsuario = $_SESSION['administrador'];
   echo $nombreUsuario;
-  /*if ($administradorUsuario) {
-    // Mostrar contenido específico para administradores
-    //echo "Administrador, $nombreUsuario";
-    echo  $nombreUsuario;
-  } else {
-    // Mostrar contenido para usuarios no administradores 
-    //echo "Bienvenido, $nombreUsuario";
-  }*/
   echo '<br>';
   echo ' <a href="logout.php">Cerrar sesión</a>';
 } else {
   echo "Bienvenido al sitio web"; 
   echo ' <a href="login.php">Iniciar sesión</a>';
 }
-/*
-if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
-  // Mostrar contenido específico para administradores
-  echo "<p>Bienvenido, administrador.</p>";
-  $nombreUsuario = $_SESSION['nombre_usuario'];
-  echo "Bienvenido, $nombreUsuario";
-  echo ' <a href="logout.php">Cerrar sesión</a>';
-  // Coloca aquí el contenido adicional para administradores
-} else {
-  // Mostrar contenido para usuarios no administradores
-  echo "<p>Bienvenido, usuario normal.</p>";
-  $nombreUsuario = $_SESSION['nombre_usuario'];
-  echo "Bienvenido, $nombreUsuario";
-  echo ' <a href="logout.php">Cerrar sesión</a>';
-  // Coloca aquí el contenido adicional para usuarios normales
-}
 
-*/
 
 ?>
 <div class="container">
@@ -251,22 +227,44 @@ if (isset($_SESSION['administrador']) && $_SESSION['administrador']) {
     </div>
 </div>
 <?php
-
-   // Comprobar si se encontraron cursos
-   /*if ($sentenciaCursos->rowCount() > 0) {
-    echo '<h1>Lista de Cursos</h1>';
-    echo '<ul>';
-    while ($row = $sentenciaCursos->fetch(PDO::FETCH_ASSOC)) {
-        echo '<li><a href="inscribirse.php?id=' . $row['id'] . '">' . $row['nombre'] . '</a></li>';
-    }
-    echo '</ul>';
-} else {
-    echo 'No se encontraron cursos.';
-}*/
+// Obtén las inscripciones
+$cursoController = new CursoController();
+$inscripciones = $cursoController->obtenerInscripciones();
 ?>
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mt-3">Tabla de Inscripciones</h2>
+            <table class="table">
+                <thead >
+                    <tr>
+                        <th>ID</th>
+                        <th>Curso</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($inscripciones as $inscripcion): ?>
+                        <tr>
+                            <td><?php echo $inscripcion['id']; ?></td>
+                            <td><?php echo $inscripcion['curso']; ?></td>
+                            <td><?php echo $inscripcion['usuario']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 
 
+<?php
+
+}else{
+  header('Location: index.php');
+}
+?>
 
 <?php include "templates/footer.php"; ?>

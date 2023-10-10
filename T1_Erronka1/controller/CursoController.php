@@ -36,6 +36,33 @@ class CursoController {
             echo 'Error en la conexión a la base de datos: ' . $e->getMessage();
         }
     }
+
+    public function obtenerInscripciones() {
+        try {
+            $config = include __DIR__ . '/../config.php'; // Ruta a tu archivo de configuración de base de datos
+            $dsn = 'mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['name'];
+            $conexion = new PDO($dsn, $config['db']['user'], $config['db']['pass'], $config['db']['options']);
+    
+            // Consulta SQL para obtener las inscripciones
+            $consultaSQL = "SELECT inscripcion.id, cursos.nombre AS curso, usuario.usuario AS usuario FROM inscripcion AS inscripcion INNER JOIN cursos AS cursos ON inscripcion.id_curso = cursos.id INNER JOIN usuarios AS usuario ON inscripcion.id_usuario = usuario.id;";
+    
+            $resultado = $conexion->query($consultaSQL);
+    
+            $inscripciones = array();
+    
+            while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
+                $inscripciones[] = $fila;
+            }
+    
+            return $inscripciones;
+        } catch (PDOException $error) {
+            // Manejo de errores en caso de problemas con la base de datos
+            // Registra el error en el registro de errores o muestra un mensaje de error detallado
+            error_log("Error al obtener inscripciones: " . $error->getMessage());
+            return array(); // Retorna un arreglo vacío en caso de error
+        }
+    }
+    
     
 }
 
