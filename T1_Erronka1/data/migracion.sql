@@ -40,3 +40,12 @@ ADD CONSTRAINT fk_inscripcion_usuarios FOREIGN KEY (id_usuario) REFERENCES usuar
 
 ALTER TABLE inscripcion
 ADD CONSTRAINT fk_inscripcion_cursos FOREIGN KEY (id_curso) REFERENCES cursos(id);
+
+/*ALTER TABLE usuarios
+DROP FOREIGN KEY fk_usuarios_alumnos;
+
+ALTER TABLE usuarios
+ADD CONSTRAINT fk_usuarios_alumnos
+FOREIGN KEY (id_alumno)
+REFERENCES alumnos (id)
+ON DELETE CASCADE;*/
